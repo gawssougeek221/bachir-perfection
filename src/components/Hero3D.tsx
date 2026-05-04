@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -19,7 +20,7 @@ export default function Hero3D() {
         .from(
           ".hero-line-1",
           {
-            x: -30,
+            x: -40,
             opacity: 0,
             duration: 1.0,
           },
@@ -28,7 +29,7 @@ export default function Hero3D() {
         .from(
           ".hero-line-2",
           {
-            x: 30,
+            x: -40,
             opacity: 0,
             duration: 1.0,
           },
@@ -44,17 +45,25 @@ export default function Hero3D() {
           "-=0.5"
         )
         .from(
-          ".hero-btn",
+          ".hero-btn-1",
           {
             y: 20,
             opacity: 0,
             duration: 0.6,
-            stagger: 0.15,
           },
           "-=0.4"
         )
         .from(
-          ".hero-scroll-indicator",
+          ".hero-btn-2",
+          {
+            y: 20,
+            opacity: 0,
+            duration: 0.6,
+          },
+          "-=0.3"
+        )
+        .from(
+          ".hero-scroll",
           {
             opacity: 0,
             duration: 0.6,
@@ -62,7 +71,6 @@ export default function Hero3D() {
           "-=0.2"
         );
 
-      // Animate the chevron bouncing
       gsap.to(".hero-chevron", {
         y: 6,
         duration: 1.2,
@@ -77,51 +85,60 @@ export default function Hero3D() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen overflow-hidden pt-20"
-      style={{
-        background:
-          "linear-gradient(135deg, #E8E6E3 0%, #F5F3F0 30%, #EDEBE8 60%, #F8F8F6 100%)",
-      }}
+      className="relative w-full h-screen overflow-hidden"
     >
-      {/* Subtle radial overlay for depth */}
+      {/* Showroom background image */}
+      <Image
+        src="/showroom.jpg"
+        alt="Luxury showroom"
+        fill
+        className="object-cover object-center"
+        priority
+        quality={90}
+      />
+
+      {/* Light overlay for text readability */}
+      <div className="absolute inset-0 bg-white/40" />
+
+      {/* Subtle vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 40%, rgba(212,175,55,0.04) 0%, transparent 70%)",
+            "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.08) 100%)",
         }}
       />
 
-      {/* Decorative subtle lines */}
-      <div className="absolute top-1/4 left-8 w-px h-32 bg-gradient-to-b from-transparent via-[#D4AF37]/20 to-transparent hidden lg:block" />
-      <div className="absolute top-1/3 right-12 w-px h-24 bg-gradient-to-b from-transparent via-[#D4AF37]/15 to-transparent hidden lg:block" />
-
-      {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-6">
-        <div className="text-center">
+      {/* Main content - LEFT ALIGNED, upper third */}
+      <div className="relative z-10 flex flex-col justify-center h-full px-8 md:px-16 lg:px-24 pt-24">
+        <div className="max-w-2xl">
           {/* Top label */}
-          <p className="hero-label text-xs tracking-[0.4em] uppercase text-[#D4AF37] font-medium mb-6">
+          <p className="hero-label text-xs md:text-sm tracking-[0.4em] uppercase text-[#D4AF37] font-medium mb-6">
             Luxury Car Renovation
           </p>
 
           {/* Main headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#111] text-center leading-[1.1]">
-            <span className="hero-line-1 block">PERFECTION IS NOT REPAIR.</span>
-            <span className="hero-line-2 block mt-2 text-[#D4AF37]">
+          <h1 className="text-4xl md:text-5xl lg:text-[4.5rem] xl:text-[5rem] font-bold tracking-tight text-[#111] leading-[1.08]">
+            <span className="hero-line-1 block">
+              PERFECTION IS
+              <br />
+              NOT REPAIR.
+            </span>
+            <span className="hero-line-2 block mt-1 text-[#D4AF37]">
               IT IS REBIRTH.
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="hero-subtitle text-base md:text-lg text-[#555] mt-6 max-w-lg mx-auto text-center leading-relaxed">
+          <p className="hero-subtitle text-sm md:text-base text-[#555] mt-6 max-w-md leading-relaxed">
             Rénovation automobile haut de gamme à Dakar, Sénégal.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
+          {/* CTA Buttons - STACKED vertically */}
+          <div className="flex flex-col gap-4 mt-10 w-fit">
             <a
               href="#transformations"
-              className="hero-btn inline-flex items-center justify-center gap-2 bg-[#D4AF37] text-white px-8 py-4 rounded-full text-sm tracking-wider uppercase font-medium hover:bg-[#C4A030] transition-colors duration-300"
+              className="hero-btn-1 inline-flex items-center justify-center gap-3 bg-[#D4AF37] text-[#111] px-8 py-4 rounded-[30px] text-sm tracking-wider uppercase font-semibold hover:bg-[#C4A030] transition-all duration-300 shadow-lg shadow-[#D4AF37]/20"
             >
               Voir Nos Transformations
               <svg
@@ -130,7 +147,7 @@ export default function Hero3D() {
                 viewBox="0 0 16 16"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="1.5"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -141,11 +158,11 @@ export default function Hero3D() {
               href="https://wa.me/221XXXXXXXX"
               target="_blank"
               rel="noopener noreferrer"
-              className="hero-btn inline-flex items-center justify-center gap-2 bg-white text-[#333] px-8 py-4 rounded-full text-sm tracking-wider uppercase font-medium border border-gray-300 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-colors duration-300"
+              className="hero-btn-2 inline-flex items-center justify-center gap-3 bg-white/90 backdrop-blur-sm text-[#333] px-8 py-3.5 rounded-[25px] text-sm tracking-wider uppercase font-medium border border-[#D4AF37]/60 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all duration-300"
             >
               <svg
-                width="18"
-                height="18"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
@@ -157,24 +174,24 @@ export default function Hero3D() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="hero-scroll-indicator absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <span className="text-xs tracking-[0.3em] uppercase text-[#999]">
-          Scroll to discover
+      {/* Scroll indicator - BOTTOM LEFT */}
+      <div className="hero-scroll absolute bottom-10 left-8 md:left-16 flex flex-col items-center gap-1">
+        <span className="text-[10px] tracking-[0.3em] uppercase text-[#999]">
+          SCROLL
         </span>
-        <svg
-          className="hero-chevron"
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="#999"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M6 8l4 4 4-4" />
-        </svg>
+        <div className="w-px h-8 bg-[#999]/40 relative overflow-hidden">
+          <div className="hero-chevron absolute top-0 left-0 w-full h-full bg-[#999]" />
+        </div>
+        <span className="text-[10px] tracking-[0.3em] uppercase text-[#999]">
+          TO DISCOVER
+        </span>
+      </div>
+
+      {/* Page indicator - BOTTOM RIGHT */}
+      <div className="absolute bottom-10 right-8 md:right-16 z-10">
+        <span className="text-xs tracking-[0.2em] text-[#999]">
+          01 / 05
+        </span>
       </div>
     </section>
   );
