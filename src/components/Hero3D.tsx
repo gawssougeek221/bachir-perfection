@@ -8,6 +8,7 @@ import {
   AdaptiveDpr,
   AdaptiveEvents,
   Preload,
+  MeshReflectorMaterial,
 } from "@react-three/drei";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -22,37 +23,25 @@ function DebugSphere() {
   );
 }
 
-// Animated SVG lines in background
-function AnimatedGridLines() {
+// Reflective showroom floor
+function ShowroomFloor() {
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.04]" preserveAspectRatio="none">
-      {/* Horizontal lines */}
-      {Array.from({ length: 20 }).map((_, i) => (
-        <line
-          key={`h-${i}`}
-          x1="0"
-          y1={`${(i / 20) * 100}%`}
-          x2="100%"
-          y2={`${(i / 20) * 100}%`}
-          stroke="#D4AF37"
-          strokeWidth="0.5"
-          className="grid-line-h"
-        />
-      ))}
-      {/* Vertical lines */}
-      {Array.from({ length: 12 }).map((_, i) => (
-        <line
-          key={`v-${i}`}
-          x1={`${(i / 12) * 100}%`}
-          y1="0"
-          x2={`${(i / 12) * 100}%`}
-          y2="100%"
-          stroke="#D4AF37"
-          strokeWidth="0.5"
-          className="grid-line-v"
-        />
-      ))}
-    </svg>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.52, 0]} receiveShadow>
+      <planeGeometry args={[50, 50]} />
+      <MeshReflectorMaterial
+        blur={[300, 100]}
+        resolution={1024}
+        mixBlur={1}
+        mixStrength={40}
+        roughness={0.8}
+        depthScale={1.2}
+        minDepthThreshold={0.4}
+        maxDepthThreshold={1.4}
+        color="#111111"
+        metalness={0.8}
+        mirror={0.5}
+      />
+    </mesh>
   );
 }
 
@@ -78,35 +67,35 @@ export default function Hero3D() {
   useEffect(() => {
     let rafId: number;
     const animate = () => {
-      currentMouseRef.current.x += (mouseRef.current.x - currentMouseRef.current.x) * 0.04;
-      currentMouseRef.current.y += (mouseRef.current.y - currentMouseRef.current.y) * 0.04;
+      currentMouseRef.current.x += (mouseRef.current.x - currentMouseRef.current.x) * 0.03;
+      currentMouseRef.current.y += (mouseRef.current.y - currentMouseRef.current.y) * 0.03;
 
       const mx = currentMouseRef.current.x;
       const my = currentMouseRef.current.y;
 
-      // Parallax layer 1: Background image (slowest)
-      const bgLayer = containerRef.current?.querySelector(".parallax-bg");
+      // Background (slowest)
+      const bgLayer = containerRef.current?.querySelector(".hero-bg");
       if (bgLayer) {
-        bgLayer.style.transform = `scale(1.1) translate(${mx * -8}px, ${my * -8}px)`;
+        bgLayer.style.transform = `scale(1.15) translate(${mx * -6}px, ${my * -4}px)`;
       }
 
-      // Parallax layer 2: Canvas (medium)
-      const canvasLayer = containerRef.current?.querySelector(".parallax-canvas");
+      // 3D Canvas (medium)
+      const canvasLayer = containerRef.current?.querySelector(".hero-canvas");
       if (canvasLayer) {
-        canvasLayer.style.transform = `translate(${mx * -15}px, ${my * -12}px)`;
+        canvasLayer.style.transform = `translate(${mx * -12}px, ${my * -8}px)`;
       }
 
-      // Parallax layer 3: Text (fastest)
-      const textLayer = containerRef.current?.querySelector(".parallax-text");
+      // Text (fastest)
+      const textLayer = containerRef.current?.querySelector(".hero-text-layer");
       if (textLayer) {
-        textLayer.style.transform = `translate(${mx * -25}px, ${my * -20}px)`;
+        textLayer.style.transform = `translate(${mx * -20}px, ${my * -15}px)`;
       }
 
-      // Parallax layer 4: Decorative elements (varies)
-      const decors = containerRef.current?.querySelectorAll(".parallax-decor");
+      // Decorative elements
+      const decors = containerRef.current?.querySelectorAll(".hero-parallax-decor");
       decors?.forEach((decor, i) => {
-        const speed = 1 + i * 0.5;
-        (decor as HTMLElement).style.transform = `translate(${mx * -20 * speed}px, ${my * -15 * speed}px)`;
+        const speed = 1.2 + i * 0.4;
+        (decor as HTMLElement).style.transform = `translate(${mx * -18 * speed}px, ${my * -12 * speed}px)`;
       });
 
       rafId = requestAnimationFrame(animate);
@@ -119,103 +108,48 @@ export default function Hero3D() {
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
+      // Hero entrance animation sequence (starts after preloader ~2s)
       tl.from(".hero-label", {
-        y: -30,
-        opacity: 0,
-        duration: 1,
-        delay: 2.3,
+        y: -30, opacity: 0, duration: 1, delay: 2.2,
       })
-        .from(
-          ".hero-line-1",
-          { x: -60, opacity: 0, duration: 1.2 },
-          "-=0.6"
-        )
-        .from(
-          ".hero-line-2",
-          { x: -60, opacity: 0, duration: 1.2 },
-          "-=0.8"
-        )
-        .from(
-          ".hero-subtitle",
-          { y: 30, opacity: 0, duration: 1 },
-          "-=0.6"
-        )
-        .from(
-          ".hero-btn-1",
-          { y: 30, opacity: 0, scale: 0.9, duration: 0.8 },
-          "-=0.4"
-        )
-        .from(
-          ".hero-btn-2",
-          { y: 30, opacity: 0, scale: 0.9, duration: 0.8 },
-          "-=0.5"
-        )
-        .from(
-          ".hero-scroll",
-          { opacity: 0, y: 20, duration: 0.8 },
-          "-=0.3"
-        )
-        .from(
-          ".hero-decor-1",
-          { scale: 0, opacity: 0, duration: 1.2, ease: "elastic.out(1, 0.5)" },
-          "-=1"
-        )
-        .from(
-          ".hero-decor-2",
-          { scale: 0, opacity: 0, duration: 1.2, ease: "elastic.out(1, 0.5)" },
-          "-=1"
-        );
+        .from(".hero-line-1", { x: -80, opacity: 0, duration: 1.4 }, "-=0.5")
+        .from(".hero-line-2", { x: -80, opacity: 0, duration: 1.4 }, "-=1.0")
+        .from(".hero-subtitle", { y: 30, opacity: 0, duration: 1 }, "-=0.7")
+        .from(".hero-btn-1", { y: 30, opacity: 0, scale: 0.9, duration: 0.8 }, "-=0.5")
+        .from(".hero-btn-2", { y: 30, opacity: 0, scale: 0.9, duration: 0.8 }, "-=0.5")
+        .from(".hero-scroll-indicator", { opacity: 0, y: 20, duration: 0.8 }, "-=0.3")
+        .from(".hero-decor-ring-1", { scale: 0, opacity: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" }, "-=1.2")
+        .from(".hero-decor-ring-2", { scale: 0, opacity: 0, duration: 1.5, ease: "elastic.out(1, 0.5)" }, "-=1.2")
+        .from(".hero-corner-tl", { scaleX: 0, scaleY: 0, duration: 0.8, ease: "power3.out" }, "-=0.8")
+        .from(".hero-corner-br", { scaleX: 0, scaleY: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
+        .from(".hero-page-indicator", { opacity: 0, duration: 0.6 }, "-=0.4");
 
-      // Floating animation for decorative elements
-      gsap.to(".hero-decor-1", {
-        y: -15,
-        rotation: 5,
-        duration: 4,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
+      // Floating ring animations
+      gsap.to(".hero-decor-ring-1", {
+        y: -12, rotation: 180, duration: 8, ease: "sine.inOut", yoyo: true, repeat: -1,
       });
-      gsap.to(".hero-decor-2", {
-        y: 10,
-        rotation: -3,
-        duration: 5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-        delay: 1,
+      gsap.to(".hero-decor-ring-2", {
+        y: 8, rotation: -120, duration: 10, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 2,
       });
 
-      // Grid lines animation
-      gsap.fromTo(
-        ".grid-line-h",
-        { scaleX: 0, transformOrigin: "left center" },
-        { scaleX: 1, duration: 2, stagger: 0.05, ease: "power2.out", delay: 2 }
-      );
-      gsap.fromTo(
-        ".grid-line-v",
-        { scaleY: 0, transformOrigin: "top center" },
-        { scaleY: 1, duration: 2, stagger: 0.08, ease: "power2.out", delay: 2.2 }
-      );
-
-      // Scroll indicator pulse
-      gsap.to(".hero-chevron-line", {
-        y: 8,
-        duration: 1.5,
-        ease: "power1.inOut",
-        yoyo: true,
-        repeat: -1,
+      // Scroll chevron pulse
+      gsap.to(".hero-chevron", {
+        y: 8, duration: 1.5, ease: "power1.inOut", yoyo: true, repeat: -1,
       });
 
-      // Hero parallax on scroll
-      gsap.to(".parallax-text", {
-        y: -100,
-        opacity: 0,
-        ease: "none",
+      // Text parallax on scroll
+      gsap.to(".hero-text-layer", {
+        y: -120, opacity: 0, ease: "none",
         scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
+          trigger: containerRef.current, start: "top top", end: "bottom top", scrub: 1,
+        },
+      });
+
+      // Canvas parallax on scroll (slower than text)
+      gsap.to(".hero-canvas", {
+        y: 60, ease: "none",
+        scrollTrigger: {
+          trigger: containerRef.current, start: "top top", end: "bottom top", scrub: 1,
         },
       });
     },
@@ -223,122 +157,121 @@ export default function Hero3D() {
   );
 
   return (
-    <section
-      ref={containerRef}
-      className="relative w-full h-screen min-h-[600px] overflow-hidden"
-    >
-      {/* LAYER 0: Background image with parallax */}
+    <section ref={containerRef} className="relative w-full h-screen min-h-[700px] overflow-hidden bg-[#0a0a0a]">
+
+      {/* ═══════════════════════════════════════════════ */}
+      {/* LAYER 0: SHOWROOM BACKGROUND IMAGE               */}
+      {/* ═══════════════════════════════════════════════ */}
       <div
-        className="parallax-bg absolute inset-0 scale-110"
+        className="hero-bg absolute inset-0 scale-115"
         style={{
           backgroundImage: "url('/showroom.jpg')",
-          backgroundSize: "contain",
-          backgroundPosition: "center center",
+          backgroundSize: "cover",
+          backgroundPosition: "center 40%",
           backgroundRepeat: "no-repeat",
-          backgroundColor: "#111111",
           willChange: "transform",
         }}
       />
 
-      {/* Animated grid overlay */}
-      <AnimatedGridLines />
+      {/* ═══════════════════════════════════════════════ */}
+      {/* LAYER 1: GRADIENT OVERLAY                       */}
+      {/* Left dark for text, right lighter for car        */}
+      {/* ═══════════════════════════════════════════════ */}
+      <div className="absolute inset-0 z-[1]" style={{
+        background: "linear-gradient(105deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.15) 80%, rgba(0,0,0,0.1) 100%)",
+      }} />
 
-      {/* Dark gradient overlay */}
-      <div
-        className="absolute inset-0 z-[1]"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0.2) 100%)",
-        }}
-      />
+      {/* Bottom fade for scroll area */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 z-[1]" style={{
+        background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+      }} />
 
-      {/* Decorative floating elements */}
-      <div className="parallax-decor hero-decor-1 absolute top-[15%] right-[15%] z-[1] pointer-events-none">
-        <div className="w-24 h-24 rounded-full border border-[#D4AF37]/10" />
+      {/* ═══════════════════════════════════════════════ */}
+      {/* LAYER 2: DECORATIVE ELEMENTS                     */}
+      {/* ═══════════════════════════════════════════════ */}
+
+      {/* Animated ring 1 */}
+      <div className="hero-parallax-decor hero-decor-ring-1 absolute z-[1] pointer-events-none"
+        style={{ top: "12%", right: "18%" }}>
+        <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border border-[#D4AF37]/15" />
+        <div className="absolute inset-2 rounded-full border border-[#D4AF37]/8" />
       </div>
-      <div className="parallax-decor hero-decor-2 absolute bottom-[25%] right-[25%] z-[1] pointer-events-none">
-        <div className="w-16 h-16 rounded-full border border-[#D4AF37]/5 rotate-45" />
+
+      {/* Animated ring 2 */}
+      <div className="hero-parallax-decor hero-decor-ring-2 absolute z-[1] pointer-events-none"
+        style={{ bottom: "28%", right: "30%" }}>
+        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border border-[#D4AF37]/10 rotate-45" />
       </div>
 
-      {/* Small decorative dots */}
-      {[...Array(6)].map((_, i) => (
+      {/* Floating particles */}
+      {[...Array(8)].map((_, i) => (
         <div
           key={i}
-          className="parallax-decor absolute w-1 h-1 rounded-full bg-[#D4AF37]/20 pointer-events-none z-[1]"
+          className="hero-parallax-decor absolute rounded-full pointer-events-none z-[1]"
           style={{
-            top: `${20 + i * 12}%`,
-            left: `${60 + (i % 3) * 15}%`,
-            animationDelay: `${i * 0.5}s`,
+            width: i % 3 === 0 ? 3 : 2,
+            height: i % 3 === 0 ? 3 : 2,
+            backgroundColor: `rgba(212,175,55,${0.1 + (i % 4) * 0.05})`,
+            top: `${15 + (i * 11) % 70}%`,
+            left: `${45 + (i * 17) % 45}%`,
+            boxShadow: `0 0 ${4 + i}px rgba(212,175,55,0.15)`,
           }}
         />
       ))}
 
-      {/* LAYER 1: 3D Car Canvas with parallax */}
-      <div
-        className="parallax-canvas absolute inset-0 z-[2]"
-        style={{ willChange: "transform" }}
-      >
+      {/* Corner accents */}
+      <div className="hero-corner-tl absolute top-[90px] left-6 md:left-14 w-10 h-10 z-[3] pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-px bg-[#D4AF37]/30" />
+        <div className="absolute top-0 left-0 w-px h-full bg-[#D4AF37]/30" />
+      </div>
+      <div className="hero-corner-br absolute bottom-[70px] right-6 md:right-14 w-10 h-10 z-[3] pointer-events-none">
+        <div className="absolute bottom-0 right-0 w-full h-px bg-[#D4AF37]/30" />
+        <div className="absolute bottom-0 right-0 w-px h-full bg-[#D4AF37]/30" />
+      </div>
+
+      {/* ═══════════════════════════════════════════════ */}
+      {/* LAYER 3: 3D CAR CANVAS                           */}
+      {/* ═══════════════════════════════════════════════ */}
+      <div className="hero-canvas absolute inset-0 z-[2]" style={{ willChange: "transform" }}>
         <Canvas
-          camera={{
-            position: [6, 3, 8],
-            fov: 35,
-            near: 0.1,
-            far: 1000,
-          }}
+          camera={{ position: [5, 2.5, 7], fov: 32, near: 0.1, far: 1000 }}
           shadows
           dpr={[1, 2]}
-          gl={{
-            alpha: true,
-            antialias: true,
-            powerPreference: "high-performance",
-          }}
+          gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
           style={{ background: "transparent" }}
-          onCreated={() => console.log("Canvas created")}
         >
           <AdaptiveDpr pixelated />
           <AdaptiveEvents />
 
-          <ambientLight intensity={2.5} color="#ffffff" />
+          {/* Premium showroom lighting */}
+          <ambientLight intensity={2.0} color="#f5f0e8" />
           <directionalLight
-            position={[8, 10, 5]}
-            intensity={4}
-            castShadow
-            color="#ffffff"
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
+            position={[8, 12, 6]} intensity={4} castShadow color="#ffffff"
+            shadow-mapSize-width={2048} shadow-mapSize-height={2048}
           />
-          <directionalLight
-            position={[-5, 5, -3]}
-            intensity={2}
-            color="#ffffff"
-          />
-          <pointLight position={[5, 3, 5]} intensity={3} color="#fff5e0" />
-          <pointLight position={[-3, 2, 3]} intensity={2} color="#e0f0ff" />
+          <directionalLight position={[-6, 6, -4]} intensity={2.5} color="#e8e0ff" />
           <spotLight
-            position={[0, 15, 0]}
-            intensity={5}
-            angle={0.4}
-            penumbra={0.5}
-            castShadow
-            color="#ffffff"
+            position={[0, 18, 2]} intensity={6} angle={0.3} penumbra={0.6}
+            castShadow color="#ffffff"
           />
-          <hemisphereLight
-            skyColor="#ffffff"
-            groundColor="#444444"
-            intensity={1.5}
+          <spotLight
+            position={[6, 8, 0]} intensity={3} angle={0.5} penumbra={0.8}
+            color="#fff5e0"
           />
+          <pointLight position={[-4, 3, 5]} intensity={2} color="#e0f0ff" />
+          <hemisphereLight skyColor="#f5f0e8" groundColor="#222222" intensity={1.8} />
 
           <Suspense fallback={<DebugSphere />}>
             <group onAfterRender={() => setModelLoaded(true)}>
               <CarModel />
             </group>
+
+            {/* Reflective showroom floor */}
+            <ShowroomFloor />
+
+            {/* Subtle shadow */}
             <ContactShadows
-              position={[0, -0.5, 0]}
-              opacity={0.25}
-              scale={30}
-              blur={2}
-              far={4}
-              color="#000000"
+              position={[0, -0.52, 0]} opacity={0.4} scale={20} blur={1.5} far={4} color="#000000"
             />
           </Suspense>
 
@@ -348,66 +281,72 @@ export default function Hero3D() {
             enableZoom={false}
             enablePan={false}
             autoRotate
-            autoRotateSpeed={0.4}
-            maxPolarAngle={Math.PI / 2.1}
-            minPolarAngle={Math.PI / 6}
-            target={[0, 0.5, 0]}
+            autoRotateSpeed={0.3}
+            maxPolarAngle={Math.PI / 2.05}
+            minPolarAngle={Math.PI / 7}
+            target={[0, 0.3, 0]}
           />
         </Canvas>
       </div>
 
-      {/* LAYER 2: Text overlay with parallax (FASTEST) */}
+      {/* ═══════════════════════════════════════════════ */}
+      {/* LAYER 4: TEXT OVERLAY                           */}
+      {/* ═══════════════════════════════════════════════ */}
       <div
-        className="parallax-text absolute inset-0 z-[4] flex items-center pointer-events-none"
-        style={{ willChange: "transform" }}
+        className="hero-text-layer absolute inset-0 z-[4] flex items-center pointer-events-none"
+        style={{ willChange: "transform, opacity" }}
       >
         <div className="px-6 md:px-12 lg:px-20 xl:px-28 pointer-events-auto">
           <div className="max-w-md lg:max-w-lg">
-            <p className="hero-label text-[10px] md:text-xs tracking-[0.4em] uppercase text-[#D4AF37] font-medium mb-4 md:mb-6">
-              Luxury Car Renovation
-            </p>
 
-            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white leading-[1.08]">
+            {/* Label */}
+            <div className="flex items-center gap-4 mb-6 md:mb-8">
+              <div className="w-8 h-px bg-[#D4AF37]/60" />
+              <p className="hero-label text-[10px] md:text-xs tracking-[0.5em] uppercase text-[#D4AF37] font-medium">
+                Luxury Car Renovation
+              </p>
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white leading-[1.05]">
               <span className="hero-line-1 block">
                 PERFECTION IS
                 <br />
                 NOT REPAIR.
               </span>
-              <span className="hero-line-2 block mt-1 text-[#D4AF37]">
+              <span className="hero-line-2 block mt-2 text-[#D4AF37]" style={{
+                textShadow: "0 0 40px rgba(212,175,55,0.2)",
+              }}>
                 IT IS REBIRTH.
               </span>
             </h1>
 
-            <p className="hero-subtitle text-xs md:text-sm text-white/70 mt-4 md:mt-6 max-w-xs leading-relaxed">
+            {/* Subtitle */}
+            <p className="hero-subtitle text-sm md:text-base text-white/50 mt-5 md:mt-7 max-w-sm leading-relaxed font-light">
               Rénovation automobile haut de gamme à Dakar, Sénégal.
             </p>
 
-            <div className="flex flex-col gap-3 md:gap-4 mt-6 md:mt-8 w-fit pointer-events-auto">
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-8 md:mt-10 w-fit pointer-events-auto">
               <a
                 href="#transformations"
-                className="hero-btn-1 inline-flex items-center justify-center gap-2 bg-[#D4AF37] text-[#111] px-6 md:px-8 py-3 md:py-4 rounded-[30px] text-[11px] md:text-sm tracking-wider uppercase font-semibold hover:bg-[#C4A030] hover:scale-105 transition-all duration-500 shadow-lg shadow-[#D4AF37]/20"
+                className="hero-btn-1 group relative inline-flex items-center justify-center gap-2.5 bg-[#D4AF37] text-[#111] px-7 md:px-9 py-3.5 md:py-4 rounded-full text-[11px] md:text-sm tracking-wider uppercase font-semibold overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(212,175,55,0.3)]"
+                style={{ boxShadow: "0 4px 30px rgba(212,175,55,0.25)" }}
                 data-cursor="pointer"
                 data-cursor-text="GO"
               >
-                Voir Nos Transformations
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 8h10M9 4l4 4-4 4" />
-                </svg>
+                <span className="relative z-10 flex items-center gap-2">
+                  Voir Nos Transformations
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4" />
+                  </svg>
+                </span>
               </a>
               <a
                 href="https://wa.me/221XXXXXXXX"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hero-btn-2 inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 md:px-8 py-3 md:py-3.5 rounded-[25px] text-[11px] md:text-sm tracking-wider uppercase font-medium border border-white/30 hover:border-[#D4AF37] hover:text-[#D4AF37] transition-all duration-500"
+                className="hero-btn-2 inline-flex items-center justify-center gap-2.5 bg-white/[0.07] backdrop-blur-md text-white/80 px-7 md:px-9 py-3.5 md:py-4 rounded-full text-[11px] md:text-sm tracking-wider uppercase font-medium border border-white/[0.12] hover:border-[#D4AF37]/50 hover:text-[#D4AF37] transition-all duration-500"
                 data-cursor="pointer"
                 data-cursor-text="WA"
               >
@@ -421,29 +360,32 @@ export default function Hero3D() {
         </div>
       </div>
 
+      {/* ═══════════════════════════════════════════════ */}
+      {/* BOTTOM INDICATORS                               */}
+      {/* ═══════════════════════════════════════════════ */}
+
       {/* Scroll indicator */}
-      <div className="hero-scroll absolute bottom-10 left-6 md:left-12 lg:left-20 flex flex-col items-center gap-1 z-[5]">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+      <div className="hero-scroll-indicator absolute bottom-10 left-6 md:left-14 flex flex-col items-center gap-2 z-[5]">
+        <span className="text-[9px] tracking-[0.4em] uppercase text-white/30 font-medium">
           SCROLL
         </span>
-        <div className="w-px h-8 bg-white/20 relative overflow-hidden">
-          <div className="hero-chevron-line absolute top-0 left-0 w-full h-1/2 bg-[#D4AF37]/60" />
+        <div className="w-px h-10 bg-white/10 relative overflow-hidden">
+          <div className="hero-chevron absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-[#D4AF37] to-transparent" />
         </div>
-        <span className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+        <span className="text-[9px] tracking-[0.4em] uppercase text-white/30 font-medium">
           TO DISCOVER
         </span>
       </div>
 
       {/* Page indicator */}
-      <div className="absolute bottom-10 right-6 md:right-12 lg:right-20 z-[5]">
-        <span className="text-xs tracking-[0.2em] text-white/30 font-mono">
+      <div className="hero-page-indicator absolute bottom-10 right-6 md:right-14 z-[5]">
+        <span className="text-[11px] tracking-[0.15em] text-white/20 font-mono">
           01 / 07
         </span>
       </div>
 
-      {/* Corner accents */}
-      <div className="absolute top-[80px] left-6 md:left-12 w-8 h-8 border-l border-t border-white/5 z-[3]" />
-      <div className="absolute bottom-[60px] right-6 md:right-12 w-8 h-8 border-r border-b border-white/5 z-[3]" />
+      {/* Thin gold line at very bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/20 to-transparent z-[5]" />
     </section>
   );
 }
