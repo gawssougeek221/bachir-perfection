@@ -8,7 +8,7 @@ import CTA from "@/components/CTA";
 
 export default function Page() {
   return (
-    <main>
+    <main className="w-full overflow-x-hidden">
       <Navbar />
       <Hero3D />
       <TrustLogos />

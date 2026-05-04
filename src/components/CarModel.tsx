@@ -10,7 +10,8 @@ export default function CarModel() {
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
-      groupRef.current.position.y = 0 + Math.sin(clock.getElapsedTime() * 0.4) * 0.015;
+      groupRef.current.position.y =
+        -0.5 + Math.sin(clock.getElapsedTime() * 0.4) * 0.02;
     }
   });
 
@@ -18,9 +19,9 @@ export default function CarModel() {
     <primitive
       ref={groupRef}
       object={scene}
-      scale={1}
-      position={[0, 0, 0]}
-      rotation={[0, -0.2, 0]}
+      scale={1.2}
+      position={[0, -0.5, 0]}
+      rotation={[0, -0.3, 0]}
     />
   );
 }
