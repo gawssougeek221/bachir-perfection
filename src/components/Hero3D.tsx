@@ -1,14 +1,31 @@
 "use client";
 
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Environment, ContactShadows } from "@react-three/drei";
+import {
+  OrbitControls,
+  ContactShadows,
+  AdaptiveDpr,
+  AdaptiveEvents,
+  Preload,
+} from "@react-three/drei";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import CarModel from "./CarModel";
 
+/* Simple debug sphere to verify canvas renders */
+function DebugSphere() {
+  return (
+    <mesh position={[0, 1, 0]}>
+      <sphereGeometry args={[0.5, 32, 32]} />
+      <meshStandardMaterial color="#D4AF37" roughness={0.3} metalness={0.6} />
+    </mesh>
+  );
+}
+
 export default function Hero3D() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [modelLoaded, setModelLoaded] = useState(false);
 
   useGSAP(
     () => {
@@ -64,7 +81,7 @@ export default function Hero3D() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen min-h-[600px] overflow-hidden mx-auto"
+      className="relative w-full h-screen min-h-[600px] overflow-hidden"
       style={{
         backgroundImage: "url('/showroom.jpg')",
         backgroundSize: "cover",
@@ -72,7 +89,7 @@ export default function Hero3D() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Dark gradient overlay - heavier on left for text readability, lighter on right for car */}
+      {/* Dark gradient overlay */}
       <div
         className="absolute inset-0 z-[1]"
         style={{
@@ -81,44 +98,82 @@ export default function Hero3D() {
         }}
       />
 
-      {/* Subtle bottom gradient for scroll indicator area */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-32 z-[1]"
-        style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)",
-        }}
-      />
-
-      {/* 3D Car Canvas - covers full hero, car positioned center-right */}
+      {/* 3D Car Canvas */}
       <div className="absolute inset-0 z-[2]">
         <Canvas
-          camera={{ position: [4, 2, 6], fov: 32 }}
+          camera={{
+            position: [6, 3, 8],
+            fov: 35,
+            near: 0.1,
+            far: 1000,
+          }}
           shadows
           dpr={[1, 2]}
-          gl={{ alpha: true, antialias: true }}
+          gl={{
+            alpha: true,
+            antialias: true,
+            powerPreference: "high-performance",
+          }}
           style={{ background: "transparent" }}
+          onCreated={() => {
+            console.log("Canvas created successfully");
+          }}
         >
-          <ambientLight intensity={1.5} />
-          <directionalLight position={[5, 8, 5]} intensity={3} castShadow />
-          <directionalLight position={[-3, 4, -2]} intensity={1.2} />
-          <spotLight
-            position={[0, 12, 0]}
-            intensity={3}
-            angle={0.35}
-            penumbra={0.6}
+          <AdaptiveDpr pixelated />
+          <AdaptiveEvents />
+
+          {/* Strong lighting setup - no CDN dependency */}
+          <ambientLight intensity={2.5} color="#ffffff" />
+          <directionalLight
+            position={[8, 10, 5]}
+            intensity={4}
             castShadow
+            color="#ffffff"
+            shadow-mapSize-width={2048}
+            shadow-mapSize-height={2048}
           />
-          <Suspense fallback={null}>
-            <CarModel />
+          <directionalLight
+            position={[-5, 5, -3]}
+            intensity={2}
+            color="#ffffff"
+          />
+          <pointLight position={[5, 3, 5]} intensity={3} color="#fff5e0" />
+          <pointLight position={[-3, 2, 3]} intensity={2} color="#e0f0ff" />
+          <spotLight
+            position={[0, 15, 0]}
+            intensity={5}
+            angle={0.4}
+            penumbra={0.5}
+            castShadow
+            color="#ffffff"
+          />
+          <hemisphereLight
+            skyColor="#ffffff"
+            groundColor="#444444"
+            intensity={1.5}
+          />
+
+          <Suspense
+            fallback={
+              /* Loading fallback - visible gold sphere */
+              <DebugSphere />
+            }
+          >
+            <group onAfterRender={() => setModelLoaded(true)}>
+              <CarModel />
+            </group>
             <ContactShadows
-              position={[0, -0.6, 0]}
-              opacity={0.15}
-              scale={20}
-              blur={2.5}
+              position={[0, -0.5, 0]}
+              opacity={0.25}
+              scale={30}
+              blur={2}
               far={4}
+              color="#000000"
             />
-            <Environment preset="studio" />
           </Suspense>
+
+          <Preload all />
+
           <OrbitControls
             enableZoom={false}
             enablePan={false}
@@ -126,7 +181,7 @@ export default function Hero3D() {
             autoRotateSpeed={0.4}
             maxPolarAngle={Math.PI / 2.1}
             minPolarAngle={Math.PI / 6}
-            target={[0, 0.4, 0]}
+            target={[0, 0.5, 0]}
           />
         </Canvas>
       </div>
