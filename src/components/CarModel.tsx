@@ -10,18 +10,17 @@ export default function CarModel() {
 
   useFrame(({ clock }) => {
     if (groupRef.current) {
-      groupRef.current.position.y = -0.2 + Math.sin(clock.getElapsedTime() * 0.5) * 0.02;
+      groupRef.current.position.y = 0 + Math.sin(clock.getElapsedTime() * 0.4) * 0.015;
     }
   });
 
-  // Auto-center and scale the model
   return (
     <primitive
       ref={groupRef}
       object={scene}
-      scale={0.8}
-      position={[0, -0.2, 0]}
-      rotation={[0, -0.3, 0]}
+      scale={1}
+      position={[0, 0, 0]}
+      rotation={[0, -0.2, 0]}
     />
   );
 }
