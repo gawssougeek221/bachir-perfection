@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, Suspense } from "react";
-import Image from "next/image";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, ContactShadows } from "@react-three/drei";
 import gsap from "gsap";
@@ -66,18 +65,12 @@ export default function Hero3D() {
     <section
       ref={containerRef}
       className="relative w-full h-screen overflow-hidden"
+      style={{
+        backgroundImage: "url('/showroom.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-      {/* Background image */}
-      <Image
-        src="/showroom.jpg"
-        alt="Luxury showroom"
-        fill
-        className="object-cover object-center"
-        priority
-        quality={90}
-        unoptimized
-      />
-
       {/* 3D Car - FULL SCREEN canvas with transparent bg */}
       <div className="absolute inset-0 z-[2]">
         <Canvas
@@ -120,7 +113,7 @@ export default function Hero3D() {
         </Canvas>
       </div>
 
-      {/* Subtle gradient overlay on left for text readability */}
+      {/* Gradient overlay left side for text readability */}
       <div
         className="absolute inset-0 z-[3] pointer-events-none"
         style={{
@@ -132,12 +125,10 @@ export default function Hero3D() {
       {/* Text overlay - LEFT ALIGNED */}
       <div className="absolute inset-0 z-[4] flex flex-col justify-center px-8 md:px-16 lg:px-24 pt-24 pointer-events-none">
         <div className="max-w-xl md:max-w-2xl pointer-events-auto">
-          {/* Top label */}
           <p className="hero-label text-xs md:text-sm tracking-[0.4em] uppercase text-[#D4AF37] font-medium mb-6">
             Luxury Car Renovation
           </p>
 
-          {/* Main headline */}
           <h1 className="text-4xl md:text-5xl lg:text-[4.5rem] xl:text-[5rem] font-bold tracking-tight text-[#111] leading-[1.08]">
             <span className="hero-line-1 block">
               PERFECTION IS
@@ -149,12 +140,10 @@ export default function Hero3D() {
             </span>
           </h1>
 
-          {/* Subtitle */}
           <p className="hero-subtitle text-sm md:text-base text-[#555] mt-6 max-w-md leading-relaxed">
             Rénovation automobile haut de gamme à Dakar, Sénégal.
           </p>
 
-          {/* CTA Buttons - STACKED */}
           <div className="flex flex-col gap-4 mt-10 w-fit pointer-events-auto">
             <a
               href="#transformations"
@@ -182,22 +171,16 @@ export default function Hero3D() {
 
       {/* Scroll indicator - BOTTOM LEFT */}
       <div className="hero-scroll absolute bottom-10 left-8 md:left-16 flex flex-col items-center gap-1 z-[5]">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-[#999]">
-          SCROLL
-        </span>
+        <span className="text-[10px] tracking-[0.3em] uppercase text-[#999]">SCROLL</span>
         <div className="w-px h-8 bg-[#999]/40 relative overflow-hidden">
           <div className="hero-chevron-line absolute top-0 left-0 w-full h-1/2 bg-[#999]" />
         </div>
-        <span className="text-[10px] tracking-[0.3em] uppercase text-[#999]">
-          TO DISCOVER
-        </span>
+        <span className="text-[10px] tracking-[0.3em] uppercase text-[#999]">TO DISCOVER</span>
       </div>
 
       {/* Page indicator - BOTTOM RIGHT */}
       <div className="absolute bottom-10 right-8 md:right-16 z-[5]">
-        <span className="text-xs tracking-[0.2em] text-[#999]">
-          01 / 05
-        </span>
+        <span className="text-xs tracking-[0.2em] text-[#999]">01 / 05</span>
       </div>
     </section>
   );
