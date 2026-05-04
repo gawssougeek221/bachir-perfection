@@ -92,19 +92,19 @@ export default function BeforeAfter() {
   }, []);
 
   return (
-    <section className="py-32 md:py-44 px-6 bg-[#0a0a0a]" id="transformations">
+    <section className="py-32 md:py-44 px-6 bg-[#F8F8F6]" id="transformations">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <span className="ba-section-label text-[10px] tracking-[0.5em] uppercase text-[#D4AF37]/50 font-medium block mb-5">
             Avant & Après
           </span>
-          <h2 className="ba-title text-3xl md:text-5xl font-semibold tracking-tight text-white">
+          <h2 className="ba-title text-3xl md:text-5xl font-semibold tracking-tight text-[#111]">
             Transformation réelle
           </h2>
           <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mt-5" />
           <div className="ba-label flex items-center justify-center gap-4 mt-5">
-            <span className="text-white/30 text-xs">Faites glisser</span>
+            <span className="text-[#bbb] text-xs">Faites glisser</span>
             <div className="w-5 h-px bg-[#D4AF37]/30" />
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[#D4AF37]/50">
               <path d="M2 8h12M10 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

@@ -51,7 +51,7 @@ export default function Page() {
         <InfiniteMarquee
           words={["REBIRTH", "SHOWROOM", "PREMIUM", "EXPERTISE"]}
           speed={35}
-          className="py-4 bg-[#0d0d0d]"
+          className="py-4 bg-[#111] rotate-[0.5deg]"
         />
 
         <BeforeAfter />
