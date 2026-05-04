@@ -146,16 +146,24 @@ export default function StatsSection() {
       }} />
 
       {/* Floating particles */}
-      {[...Array(12)].map((_, i) => (
-        <div
-          key={i}
-          className="stats-particle absolute w-1 h-1 rounded-full bg-[#D4AF37]/20 pointer-events-none"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-          }}
-        />
-      ))}
+      {[...Array(12)].map((_, i) => {
+        const positions = [
+          { top: 12, left: 8 }, { top: 25, left: 45 }, { top: 38, left: 78 },
+          { top: 52, left: 15 }, { top: 65, left: 62 }, { top: 78, left: 33 },
+          { top: 18, left: 88 }, { top: 44, left: 52 }, { top: 72, left: 8 },
+          { top: 85, left: 75 }, { top: 32, left: 92 }, { top: 58, left: 38 },
+        ];
+        return (
+          <div
+            key={i}
+            className="stats-particle absolute w-1 h-1 rounded-full bg-[#D4AF37]/20 pointer-events-none"
+            style={{
+              top: `${positions[i].top}%`,
+              left: `${positions[i].left}%`,
+            }}
+          />
+        );
+      })}
 
       {/* Top/bottom lines */}
       <div className="stats-wipe absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/20 to-transparent origin-center" />
