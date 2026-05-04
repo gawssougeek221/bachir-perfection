@@ -84,9 +84,10 @@ export default function Hero3D() {
       className="relative w-full h-screen min-h-[600px] overflow-hidden"
       style={{
         backgroundImage: "url('/showroom.jpg')",
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
+        backgroundColor: "#111111",
       }}
     >
       {/* Dark gradient overlay */}
