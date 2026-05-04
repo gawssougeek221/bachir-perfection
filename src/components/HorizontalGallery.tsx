@@ -117,12 +117,12 @@ export default function HorizontalGallery() {
   }, { scope: sectionRef });
 
   const images = [
-    { title: "Mercedes Classe S", category: "Restauration complète", year: "2024" },
-    { title: "BMW Série 5", category: "Peinture showroom", year: "2024" },
-    { title: "Range Rover Evoque", category: "Détailing premium", year: "2023" },
-    { title: "Porsche Cayenne", category: "Carrosserie premium", year: "2024" },
-    { title: "Audi A8", category: "Transformation totale", year: "2023" },
-    { title: "Mercedes GLE", category: "Finition cuir + peinture", year: "2024" },
+    { title: "Mercedes Classe S", category: "Restauration complète", year: "2024", image: "/gallery-1-mercedes.png" },
+    { title: "BMW Série 5", category: "Peinture showroom", year: "2024", image: "/gallery-2-bmw.png" },
+    { title: "Range Rover Evoque", category: "Détailing premium", year: "2023", image: "/gallery-3-rangerover.png" },
+    { title: "Porsche Cayenne", category: "Carrosserie premium", year: "2024", image: "/gallery-4-porsche.png" },
+    { title: "Audi A8", category: "Transformation totale", year: "2023", image: "/gallery-5-audi.png" },
+    { title: "Mercedes GLE", category: "Finition cuir + peinture", year: "2024", image: "/gallery-6-mercedes-gle.png" },
   ];
 
   return (
@@ -165,18 +165,9 @@ export default function HorizontalGallery() {
               style={{ aspectRatio: "4/5" }}
             >
               <div
-                className="gallery-img-inner w-full h-full transition-transform duration-700 group-hover:scale-110"
+                className="gallery-img-inner w-full h-full transition-transform duration-700 group-hover:scale-110 bg-cover bg-center"
                 style={{
-                  background: `linear-gradient(${135 + index * 30}deg, ${
-                    [
-                      "#1a1a2e, #16213e, #0f3460",
-                      "#1b1b2f, #162447, #1f4068",
-                      "#1f1f1f, #2d2d44, #1a1a30",
-                      "#141414, #1e1e30, #0a1628",
-                      "#0f0f1a, #1a1a2e, #162447",
-                      "#111122, #1c1c36, #141428",
-                    ][index]
-                  })`,
+                  backgroundImage: `url('${img.image}')`,
                 }}
               />
 

@@ -15,6 +15,7 @@ const services = [
       "Réparation et restauration de carrosserie avec une précision artisanale. Chaque surface retravaillée pour retrouver son éclat d'origine, avec des techniques de pointe et un savoir-faire hérité des meilleurs ateliers européens.",
     icon: Shield,
     number: "01",
+    image: "/service-1-carrosserie.png",
   },
   {
     title: "Peinture showroom",
@@ -22,6 +23,7 @@ const services = [
       "Application en cabine contrôlée avec des peintures haute définition. Chaque couche est posée avec une maîtrise artisanale d'exception, garantissant un résultat showroom irréprochable.",
     icon: Palette,
     number: "02",
+    image: "/service-2-peinture.png",
   },
   {
     title: "Polish detailing",
@@ -29,6 +31,7 @@ const services = [
       "Polissage professionnel et protection céramique longue durée. Nous redonnons à chaque surface sa brillance d'origine avec des produits premium et un soin méticuleux.",
     icon: Sparkles,
     number: "03",
+    image: "/service-3-polish.png",
   },
   {
     title: "Restauration complète",
@@ -36,6 +39,7 @@ const services = [
       "Transformation totale de A à Z, comme sortie d'usine. Du démontage à la livraison, chaque étape est exécutée avec la plus haute exigence de qualité.",
     icon: RefreshCw,
     number: "04",
+    image: "/service-4-restauration.png",
   },
   {
     title: "Jantes premium",
@@ -43,6 +47,7 @@ const services = [
       "Remise en état, peinture et personnalisation de jantes. Nous transformons vos jantes en véritables pièces d'orfèvrerie automobile avec des finitions uniques.",
     icon: CircleDot,
     number: "05",
+    image: "/service-5-jantes.png",
   },
   {
     title: "Intérieur cuir",
@@ -50,6 +55,7 @@ const services = [
       "Restauration et réfection de sellerie cuir haut de gamme. Du nettoyage profond à la retouche couleur, nous redonnons vie à votre habitacle avec des matériaux premium.",
     icon: Armchair,
     number: "06",
+    image: "/service-6-cuir.png",
   },
 ];
 
@@ -148,29 +154,40 @@ export default function Services() {
             return (
               <div
                 key={service.title}
-                className="service-card group relative p-8 md:p-10 border border-white/5 rounded-2xl hover:border-[#D4AF37]/20 transition-all duration-700 bg-white/[0.02] hover:bg-white/[0.04]"
+                className="service-card group relative border border-white/5 rounded-2xl hover:border-[#D4AF37]/20 transition-all duration-700 bg-white/[0.02] hover:bg-white/[0.04] overflow-hidden"
                 data-cursor="pointer"
                 data-cursor-text={service.number}
               >
-                {/* Number */}
-                <span className="absolute top-6 right-8 text-[64px] font-light leading-none text-white/[0.03] group-hover:text-[#D4AF37]/10 transition-colors duration-700 select-none">
-                  {service.number}
-                </span>
-
-                {/* Icon */}
-                <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4AF37]/20 transition-all duration-500 group-hover:scale-110">
-                  <Icon className="w-5 h-5 text-[#D4AF37]" />
+                {/* Card Image */}
+                <div className="relative h-48 md:h-56 overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/40 to-transparent" />
+                  {/* Number overlay */}
+                  <span className="absolute top-4 right-5 text-[48px] font-light leading-none text-white/10 group-hover:text-[#D4AF37]/20 transition-colors duration-700 select-none">
+                    {service.number}
+                  </span>
                 </div>
 
-                {/* Title */}
-                <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-[#D4AF37] transition-colors duration-500">
-                  {service.title}
-                </h3>
+                <div className="p-8 md:p-10">
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4AF37]/20 transition-all duration-500 group-hover:scale-110">
+                    <Icon className="w-5 h-5 text-[#D4AF37]" />
+                  </div>
 
-                {/* Description */}
-                <p className="text-white/30 text-sm leading-relaxed group-hover:text-white/50 transition-colors duration-500">
-                  {service.description}
-                </p>
+                  {/* Title */}
+                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-[#D4AF37] transition-colors duration-500">
+                    {service.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-white/30 text-sm leading-relaxed group-hover:text-white/50 transition-colors duration-500">
+                    {service.description}
+                  </p>
+                </div>
 
                 {/* Gold bottom line */}
                 <div className="service-gold-line absolute bottom-0 left-8 right-8 h-px bg-[#D4AF37]/0 group-hover:bg-[#D4AF37]/40 origin-left transition-colors duration-700" />
