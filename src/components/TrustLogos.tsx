@@ -109,9 +109,9 @@ export default function TrustLogos() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 px-6 bg-[#F8F8F6] border-b border-[#eee] relative"
+      className="py-20 px-6 bg-[#050505] border-b border-white/5 relative"
     >
-      <p className="trust-label text-[10px] tracking-[0.5em] uppercase text-[#bbb] text-center mb-12">
+      <p className="trust-label text-[10px] tracking-[0.5em] uppercase text-white/30 text-center mb-12">
         Ils nous font confiance
       </p>
 
@@ -123,7 +123,7 @@ export default function TrustLogos() {
             data-cursor="pointer"
           >
             {logoComponents[brand.svg]?.()}
-            <span className="text-sm font-bold tracking-[0.15em] text-[#ccc] group-hover:text-[#D4AF37] transition-colors duration-500">
+            <span className="text-sm font-bold tracking-[0.15em] text-white/20 group-hover:text-[#D4AF37] transition-colors duration-500">
               {brand.name}
             </span>
           </div>

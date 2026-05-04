@@ -43,7 +43,7 @@ export default function CTA() {
   return (
     <section
       ref={sectionRef}
-      className="py-32 md:py-44 px-6 relative overflow-hidden bg-[#F8F8F6]"
+      className="py-32 md:py-44 px-6 relative overflow-hidden bg-[#111]"
     >
       {/* Decorative lines */}
       <div className="absolute top-12 left-1/4 w-px h-24 bg-gradient-to-b from-transparent via-[#D4AF37]/15 to-transparent hidden md:block" />
@@ -58,14 +58,14 @@ export default function CTA() {
           <div className="w-8 h-px bg-[#D4AF37]/30" />
         </div>
 
-        <h2 className="cta-reveal text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-[#111] leading-[1.1]">
+        <h2 className="cta-reveal text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.1]">
           Votre voiture
           <br />
           mérite le{" "}
           <span className="text-[#D4AF37]">meilleur</span>
         </h2>
 
-        <p className="cta-reveal text-[#999] mt-6 text-sm max-w-md mx-auto leading-relaxed">
+        <p className="cta-reveal text-white/40 mt-6 text-sm max-w-md mx-auto leading-relaxed">
           Contactez-nous pour une transformation premium. Devis gratuit sous 24h,
           directement sur WhatsApp.
         </p>
@@ -94,7 +94,7 @@ export default function CTA() {
         {/* Location */}
         <div className="cta-reveal mt-20 flex items-center justify-center gap-4">
           <div className="w-12 h-px bg-[#D4AF37]/20" />
-          <span className="text-[10px] tracking-[0.3em] uppercase text-[#bbb]">
+          <span className="text-[10px] tracking-[0.3em] uppercase text-white/30">
             Dakar, Sénégal
           </span>
           <div className="w-12 h-px bg-[#D4AF37]/20" />
