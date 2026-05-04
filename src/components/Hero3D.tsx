@@ -22,55 +22,32 @@ export default function Hero3D() {
       })
         .from(
           ".hero-line-1",
-          {
-            x: -40,
-            opacity: 0,
-            duration: 1.0,
-          },
+          { x: -40, opacity: 0, duration: 1.0 },
           "-=0.4"
         )
         .from(
           ".hero-line-2",
-          {
-            x: -40,
-            opacity: 0,
-            duration: 1.0,
-          },
+          { x: -40, opacity: 0, duration: 1.0 },
           "-=0.7"
         )
         .from(
           ".hero-subtitle",
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.8,
-          },
+          { y: 20, opacity: 0, duration: 0.8 },
           "-=0.5"
         )
         .from(
           ".hero-btn-1",
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-          },
+          { y: 20, opacity: 0, duration: 0.6 },
           "-=0.4"
         )
         .from(
           ".hero-btn-2",
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-          },
+          { y: 20, opacity: 0, duration: 0.6 },
           "-=0.3"
         )
         .from(
           ".hero-scroll",
-          {
-            opacity: 0,
-            duration: 0.6,
-          },
+          { opacity: 0, duration: 0.6 },
           "-=0.2"
         );
 
@@ -101,44 +78,32 @@ export default function Hero3D() {
         unoptimized
       />
 
-      {/* Light overlay */}
-      <div className="absolute inset-0 bg-white/30" />
-
-      {/* Subtle vignette */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.1) 100%)",
-        }}
-      />
-
-      {/* 3D Car - bottom right area */}
-      <div className="absolute bottom-0 right-0 w-full md:w-[65%] h-[60%] md:h-[80%] z-[5]">
+      {/* 3D Car - FULL SCREEN canvas with transparent bg */}
+      <div className="absolute inset-0 z-[2]">
         <Canvas
-          camera={{ position: [3, 1.5, 5], fov: 35 }}
+          camera={{ position: [4, 2, 6], fov: 30 }}
           shadows
           dpr={[1, 2]}
           gl={{ alpha: true, antialias: true }}
           style={{ background: "transparent" }}
         >
-          <ambientLight intensity={0.8} />
-          <directionalLight position={[5, 5, 5]} intensity={2} castShadow />
-          <directionalLight position={[-3, 3, -2]} intensity={0.6} />
+          <ambientLight intensity={1} />
+          <directionalLight position={[5, 8, 5]} intensity={2.5} castShadow />
+          <directionalLight position={[-3, 4, -2]} intensity={0.8} />
           <spotLight
-            position={[0, 8, 0]}
-            intensity={1.5}
-            angle={0.5}
-            penumbra={0.5}
+            position={[0, 10, 0]}
+            intensity={2}
+            angle={0.4}
+            penumbra={0.6}
             castShadow
           />
           <Suspense fallback={null}>
             <CarModel />
             <ContactShadows
               position={[0, -0.5, 0]}
-              opacity={0.3}
-              scale={12}
-              blur={2}
+              opacity={0.25}
+              scale={15}
+              blur={2.5}
               far={4}
             />
             <Environment preset="studio" />
@@ -147,16 +112,26 @@ export default function Hero3D() {
             enableZoom={false}
             enablePan={false}
             autoRotate
-            autoRotateSpeed={0.8}
+            autoRotateSpeed={0.6}
             maxPolarAngle={Math.PI / 2.1}
-            minPolarAngle={Math.PI / 5}
+            minPolarAngle={Math.PI / 6}
+            target={[0, 0.3, 0]}
           />
         </Canvas>
       </div>
 
+      {/* Subtle gradient overlay on left for text readability */}
+      <div
+        className="absolute inset-0 z-[3] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(248,248,246,0.85) 0%, rgba(248,248,246,0.5) 35%, transparent 60%)",
+        }}
+      />
+
       {/* Text overlay - LEFT ALIGNED */}
-      <div className="relative z-10 flex flex-col justify-center h-full px-8 md:px-16 lg:px-24 pt-24">
-        <div className="max-w-xl md:max-w-2xl">
+      <div className="absolute inset-0 z-[4] flex flex-col justify-center px-8 md:px-16 lg:px-24 pt-24 pointer-events-none">
+        <div className="max-w-xl md:max-w-2xl pointer-events-auto">
           {/* Top label */}
           <p className="hero-label text-xs md:text-sm tracking-[0.4em] uppercase text-[#D4AF37] font-medium mb-6">
             Luxury Car Renovation
@@ -180,7 +155,7 @@ export default function Hero3D() {
           </p>
 
           {/* CTA Buttons - STACKED */}
-          <div className="flex flex-col gap-4 mt-10 w-fit">
+          <div className="flex flex-col gap-4 mt-10 w-fit pointer-events-auto">
             <a
               href="#transformations"
               className="hero-btn-1 inline-flex items-center justify-center gap-3 bg-[#D4AF37] text-[#111] px-8 py-4 rounded-[30px] text-sm tracking-wider uppercase font-semibold hover:bg-[#C4A030] transition-all duration-300 shadow-lg shadow-[#D4AF37]/20"
@@ -206,7 +181,7 @@ export default function Hero3D() {
       </div>
 
       {/* Scroll indicator - BOTTOM LEFT */}
-      <div className="hero-scroll absolute bottom-10 left-8 md:left-16 flex flex-col items-center gap-1 z-20">
+      <div className="hero-scroll absolute bottom-10 left-8 md:left-16 flex flex-col items-center gap-1 z-[5]">
         <span className="text-[10px] tracking-[0.3em] uppercase text-[#999]">
           SCROLL
         </span>
@@ -219,7 +194,7 @@ export default function Hero3D() {
       </div>
 
       {/* Page indicator - BOTTOM RIGHT */}
-      <div className="absolute bottom-10 right-8 md:right-16 z-20">
+      <div className="absolute bottom-10 right-8 md:right-16 z-[5]">
         <span className="text-xs tracking-[0.2em] text-[#999]">
           01 / 05
         </span>
