@@ -1,105 +1,183 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { Shield, Palette, Sparkles, RefreshCw, CircleDot, Armchair } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
     title: "Carrosserie premium",
-    description: "Réparation et restauration de carrosserie avec précision artisanale",
+    description:
+      "Réparation et restauration de carrosserie avec une précision artisanale. Chaque surface retravaillée pour retrouver son éclat d'origine, avec des techniques de pointe et un savoir-faire hérité des meilleurs ateliers européens.",
     icon: Shield,
+    number: "01",
   },
   {
     title: "Peinture showroom",
-    description: "Application en cabine contrôlée, finition haute définition",
+    description:
+      "Application en cabine contrôlée avec des peintures haute définition. Chaque couche est posée avec une maîtrise artisanale d'exception, garantissant un résultat showroom irréprochable.",
     icon: Palette,
+    number: "02",
   },
   {
     title: "Polish detailing",
-    description: "Polissage professionnel et protection céramique longue durée",
+    description:
+      "Polissage professionnel et protection céramique longue durée. Nous redonnons à chaque surface sa brillance d'origine avec des produits premium et un soin méticuleux.",
     icon: Sparkles,
+    number: "03",
   },
   {
     title: "Restauration complète",
-    description: "Transformation totale de A à Z, comme sortie d'usine",
+    description:
+      "Transformation totale de A à Z, comme sortie d'usine. Du démontage à la livraison, chaque étape est exécutée avec la plus haute exigence de qualité.",
     icon: RefreshCw,
+    number: "04",
   },
   {
     title: "Jantes premium",
-    description: "Remise en état, peinture et personnalisation de jantes",
+    description:
+      "Remise en état, peinture et personnalisation de jantes. Nous transformons vos jantes en véritables pièces d'orfèvrerie automobile avec des finitions uniques.",
     icon: CircleDot,
+    number: "05",
   },
   {
     title: "Intérieur cuir",
-    description: "Restauration et réfection de sellerie cuir haut de gamme",
+    description:
+      "Restauration et réfection de sellerie cuir haut de gamme. Du nettoyage profond à la retouche couleur, nous redonnons vie à votre habitacle avec des matériaux premium.",
     icon: Armchair,
+    number: "06",
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  }),
-};
-
 export default function Services() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    // Reveal section header
+    gsap.from(".services-header", {
+      y: 60,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".services-header",
+        start: "top 85%",
+      },
+    });
+
+    // Reveal each card
+    gsap.utils.toArray<HTMLElement>(".service-card").forEach((card, i) => {
+      gsap.from(card, {
+        y: 80,
+        opacity: 0,
+        duration: 0.8,
+        delay: i * 0.05,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 90%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      // Gold line reveal
+      const line = card.querySelector(".service-gold-line");
+      if (line) {
+        gsap.from(line, {
+          scaleX: 0,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+          },
+        });
+      }
+    });
+  }, { scope: sectionRef });
+
   return (
-    <section className="py-32 px-6 max-w-6xl mx-auto" id="services">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-16"
-      >
-        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#111]">
-          Nos Services
-        </h2>
-        {/* Gold underline accent */}
-        <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mt-4 mb-4" />
-        <p className="text-[#555] mt-2 max-w-md mx-auto">
-          Chaque service est exécuté avec la plus haute attention aux détails
-        </p>
-      </motion.div>
+    <section
+      ref={sectionRef}
+      className="py-32 px-6 md:px-12 lg:px-20 bg-[#111] relative overflow-hidden"
+      id="services"
+    >
+      {/* Top decorative line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/20 to-transparent" />
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {services.map((service, i) => {
-          const Icon = service.icon;
-          return (
-            <motion.div
-              key={service.title}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={cardVariants}
-              className="p-8 bg-white border border-gray-200 rounded-2xl hover:scale-[1.02] hover:shadow-lg transition-all duration-300 group cursor-default border-t-0 relative overflow-hidden"
-            >
-              {/* Gold top border on hover */}
-              <div className="absolute top-0 left-0 right-0 h-0 bg-[#D4AF37] transition-all duration-300 group-hover:h-0.5" />
+      {/* Background pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.015] pointer-events-none"
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 99px,
+            rgba(212,175,55,0.5) 99px,
+            rgba(212,175,55,0.5) 100px
+          )`,
+        }}
+      />
 
-              <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-5 group-hover:bg-[#D4AF37]/20 transition-colors duration-300">
-                <Icon className="w-5 h-5 text-[#D4AF37]" />
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Section header */}
+        <div className="services-header mb-20 md:mb-28">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="text-[10px] tracking-[0.5em] uppercase text-[#D4AF37]/60 font-medium">
+              Ce que nous offrons
+            </span>
+            <div className="w-12 h-px bg-[#D4AF37]/20" />
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-white">
+            Nos Services
+          </h2>
+          <p className="text-white/30 mt-4 max-w-md text-sm leading-relaxed">
+            Chaque service est exécuté avec la plus haute attention aux détails,
+            dans notre atelier à Dakar.
+          </p>
+        </div>
+
+        {/* Services grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service) => {
+            const Icon = service.icon;
+            return (
+              <div
+                key={service.title}
+                className="service-card group relative p-8 md:p-10 border border-white/5 rounded-2xl hover:border-[#D4AF37]/20 transition-all duration-700 bg-white/[0.02] hover:bg-white/[0.04]"
+                data-cursor="pointer"
+                data-cursor-text={service.number}
+              >
+                {/* Number */}
+                <span className="absolute top-6 right-8 text-[64px] font-light leading-none text-white/[0.03] group-hover:text-[#D4AF37]/10 transition-colors duration-700 select-none">
+                  {service.number}
+                </span>
+
+                {/* Icon */}
+                <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mb-6 group-hover:bg-[#D4AF37]/20 transition-all duration-500 group-hover:scale-110">
+                  <Icon className="w-5 h-5 text-[#D4AF37]" />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-[#D4AF37] transition-colors duration-500">
+                  {service.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-white/30 text-sm leading-relaxed group-hover:text-white/50 transition-colors duration-500">
+                  {service.description}
+                </p>
+
+                {/* Gold bottom line */}
+                <div className="service-gold-line absolute bottom-0 left-8 right-8 h-px bg-[#D4AF37]/0 group-hover:bg-[#D4AF37]/40 origin-left transition-colors duration-700" />
               </div>
-
-              <h3 className="text-xl font-semibold text-[#111] mb-2">
-                {service.title}
-              </h3>
-              <p className="text-[#555] text-sm leading-relaxed">
-                {service.description}
-              </p>
-
-              <div className="mt-4 w-8 h-px bg-[#D4AF37]/40 group-hover:w-full group-hover:bg-[#D4AF37] transition-all duration-500" />
-            </motion.div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );

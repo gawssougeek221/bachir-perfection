@@ -1,50 +1,74 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const linksRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Animate navbar entry
+  useEffect(() => {
+    const tl = gsap.timeline({ delay: 2.2 }); // After preloader
+    tl.fromTo(
+      navRef.current,
+      { y: -80, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+    );
   }, []);
 
   const navLinks = ["ACCUEIL", "SERVICES", "RÉALISATIONS", "À PROPOS", "CONTACT"];
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      ref={navRef}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
         scrolled
-          ? "bg-[#F8F8F6]/95 backdrop-blur-md shadow-[0_1px_20px_rgba(0,0,0,0.06)]"
-          : "bg-[#F8F8F6]/80 backdrop-blur-sm"
+          ? "bg-[#111]/90 backdrop-blur-xl shadow-[0_1px_30px_rgba(0,0,0,0.3)] border-b border-white/5"
+          : "bg-transparent"
       }`}
+      style={{ opacity: 0 }}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-16 lg:px-24">
         <div className="h-[70px] flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex flex-col items-start">
-            <span className="text-lg font-bold tracking-[0.15em] text-[#111] leading-none">
+          <a href="#" className="flex flex-col items-start group" data-cursor="pointer">
+            <span
+              className={`text-lg font-bold tracking-[0.15em] leading-none transition-colors duration-500 ${
+                scrolled || mobileOpen
+                  ? "text-white"
+                  : "text-white"
+              }`}
+            >
               PERFECTION
             </span>
-            <span className="text-[9px] tracking-[0.35em] uppercase text-[#D4AF37] mt-1 font-medium">
+            <span className="text-[9px] tracking-[0.35em] uppercase text-[#D4AF37] mt-1 font-medium group-hover:tracking-[0.45em] transition-all duration-500">
               BY BACHIR
             </span>
           </a>
 
           {/* Center Nav Links - Desktop */}
-          <div className="hidden lg:flex items-center gap-10">
-            {navLinks.map((link) => (
+          <div ref={linksRef} className="hidden lg:flex items-center gap-10">
+            {navLinks.map((link, i) => (
               <a
                 key={link}
                 href={`#${link.toLowerCase().replace(/\s+/g, "-").replace(/à/g, "a").replace(/é/g, "e")}`}
-                className="text-[11px] tracking-[0.2em] uppercase text-[#555] hover:text-[#D4AF37] transition-colors duration-300 font-medium"
+                className="text-[11px] tracking-[0.2em] uppercase text-white/50 hover:text-[#D4AF37] transition-all duration-300 font-medium relative group"
+                data-cursor="pointer"
+                data-cursor-text={link.slice(0, 2)}
               >
                 {link}
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#D4AF37] group-hover:w-full transition-all duration-500" />
               </a>
             ))}
           </div>
@@ -55,7 +79,9 @@ export default function Navbar() {
               href="https://wa.me/221XXXXXXXX"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:inline-flex items-center gap-2 bg-[#D4AF37] text-[#111] text-[10px] tracking-[0.2em] uppercase px-5 py-2.5 rounded-[25px] font-semibold hover:bg-[#C4A030] transition-all duration-300 shadow-sm shadow-[#D4AF37]/20"
+              className="hidden md:inline-flex items-center gap-2 bg-[#D4AF37] text-[#111] text-[10px] tracking-[0.2em] uppercase px-5 py-2.5 rounded-[25px] font-semibold hover:bg-[#C4A030] hover:scale-105 transition-all duration-300 shadow-sm shadow-[#D4AF37]/20"
+              data-cursor="pointer"
+              data-cursor-text="GO"
             >
               <svg
                 width="14"
@@ -73,20 +99,25 @@ export default function Navbar() {
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden flex flex-col gap-1.5 p-2"
               aria-label="Toggle menu"
+              data-cursor="pointer"
             >
               <span
-                className={`w-5 h-px bg-[#111] transition-all duration-300 ${
-                  mobileOpen ? "rotate-45 translate-y-[3.5px]" : ""
+                className={`w-5 h-px bg-white transition-all duration-300 ${
+                  mobileOpen
+                    ? "rotate-45 translate-y-[3.5px] bg-[#D4AF37]"
+                    : ""
                 }`}
               />
               <span
-                className={`w-5 h-px bg-[#111] transition-all duration-300 ${
+                className={`w-5 h-px bg-white transition-all duration-300 ${
                   mobileOpen ? "opacity-0" : ""
                 }`}
               />
               <span
-                className={`w-5 h-px bg-[#111] transition-all duration-300 ${
-                  mobileOpen ? "-rotate-45 -translate-y-[3.5px]" : ""
+                className={`w-5 h-px bg-white transition-all duration-300 ${
+                  mobileOpen
+                    ? "-rotate-45 -translate-y-[3.5px] bg-[#D4AF37]"
+                    : ""
                 }`}
               />
             </button>
@@ -96,16 +127,17 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 ${
-          mobileOpen ? "max-h-96" : "max-h-0"
+        className={`lg:hidden overflow-hidden transition-all duration-500 ${
+          mobileOpen ? "max-h-[400px]" : "max-h-0"
         }`}
       >
-        <div className="px-6 md:px-16 py-6 flex flex-col gap-5 bg-[#F8F8F6]/98 backdrop-blur-md border-t border-gray-200/60">
-          {navLinks.map((link) => (
+        <div className="px-6 md:px-16 py-8 flex flex-col gap-6 bg-[#111]/98 backdrop-blur-xl border-t border-white/5">
+          {navLinks.map((link, i) => (
             <a
               key={link}
               href={`#${link.toLowerCase().replace(/\s+/g, "-").replace(/à/g, "a").replace(/é/g, "e")}`}
-              className="text-[11px] tracking-[0.2em] uppercase text-[#555] hover:text-[#D4AF37] transition-colors duration-300 font-medium"
+              className="text-xs tracking-[0.25em] uppercase text-white/40 hover:text-[#D4AF37] transition-colors duration-300 font-medium pl-2 border-l border-transparent hover:border-[#D4AF37]/30 hover:pl-4"
+              style={{ transition: "all 0.3s ease" }}
               onClick={() => setMobileOpen(false)}
             >
               {link}
@@ -115,7 +147,7 @@ export default function Navbar() {
             href="https://wa.me/221XXXXXXXX"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#111] text-[10px] tracking-[0.2em] uppercase px-5 py-2.5 rounded-[25px] font-semibold hover:bg-[#C4A030] transition-all duration-300 w-fit"
+            className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#111] text-[10px] tracking-[0.2em] uppercase px-5 py-2.5 rounded-[25px] font-semibold hover:bg-[#C4A030] transition-all duration-300 w-fit mt-2"
           >
             <svg
               width="14"
