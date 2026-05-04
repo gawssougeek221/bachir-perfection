@@ -1,22 +1,20 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function BeforeAfter() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
 
-  const updatePosition = useCallback(
-    (clientX: number) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      setSliderPos(percentage);
-    },
-    []
-  );
+  const updatePosition = useCallback((clientX: number) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    setSliderPos(percentage);
+  }, []);
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -62,13 +60,22 @@ export default function BeforeAfter() {
   }, [isDragging, updatePosition]);
 
   return (
-    <section className="py-32 px-6 text-center">
-      <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#111] mb-4">
-        Transformation réelle
-      </h2>
-      <p className="text-[#666] mb-10 max-w-md mx-auto">
-        Faites glisser pour voir la différence
-      </p>
+    <section className="py-32 px-6 text-center" id="transformations">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-[#111] mb-4">
+          Transformation réelle
+        </h2>
+        {/* Gold underline */}
+        <div className="w-12 h-0.5 bg-[#D4AF37] mx-auto mb-4" />
+        <p className="text-[#555] mb-10 max-w-md mx-auto">
+          Faites glisser pour voir la différence
+        </p>
+      </motion.div>
 
       <div
         ref={containerRef}
@@ -86,8 +93,10 @@ export default function BeforeAfter() {
           }}
         >
           {/* Simulated scratches/damage texture */}
-          <div className="absolute inset-0 opacity-40" style={{
-            backgroundImage: `repeating-linear-gradient(
+          <div
+            className="absolute inset-0 opacity-40"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
               45deg,
               transparent,
               transparent 10px,
@@ -100,13 +109,16 @@ export default function BeforeAfter() {
               rgba(0,0,0,0.08) 20px,
               rgba(0,0,0,0.08) 21px
             )`,
-          }} />
+            }}
+          />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-white/80 text-2xl md:text-3xl font-semibold tracking-tight">
                 AVANT
               </p>
-              <p className="text-white/50 text-sm mt-2">Usure · Rayures · Patine</p>
+              <p className="text-white/50 text-sm mt-2">
+                Usure · Rayures · Patine
+              </p>
             </div>
           </div>
         </div>
@@ -121,15 +133,21 @@ export default function BeforeAfter() {
           }}
         >
           {/* Pristine showroom finish */}
-          <div className="absolute inset-0 opacity-30" style={{
-            background: "radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.3), transparent 60%)",
-          }} />
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              background:
+                "radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.3), transparent 60%)",
+            }}
+          />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-white/90 text-2xl md:text-3xl font-semibold tracking-tight">
                 APRÈS
               </p>
-              <p className="text-white/60 text-sm mt-2">Showroom · Finition parfaite</p>
+              <p className="text-white/60 text-sm mt-2">
+                Showroom · Finition parfaite
+              </p>
             </div>
           </div>
         </div>
@@ -142,10 +160,10 @@ export default function BeforeAfter() {
             transform: "translateX(-50%)",
           }}
         >
-          <div className="w-px h-full bg-white shadow-lg" />
+          <div className="w-px h-full bg-[#D4AF37] shadow-lg" />
           {/* Circular handle */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-xl flex items-center justify-center"
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#D4AF37] shadow-xl flex items-center justify-center"
             style={{ cursor: isDragging ? "grabbing" : "grab" }}
           >
             <svg
@@ -153,7 +171,7 @@ export default function BeforeAfter() {
               height="20"
               viewBox="0 0 20 20"
               fill="none"
-              className="text-[#111]"
+              className="text-white"
             >
               <path
                 d="M6 10L3 10M17 10L14 10M6 10L8 8M6 10L8 12M14 10L12 8M14 10L12 12"
@@ -163,6 +181,13 @@ export default function BeforeAfter() {
                 strokeLinejoin="round"
               />
             </svg>
+          </div>
+          {/* AVANT / APRÈS labels */}
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-[calc(100%+16px)] text-xs tracking-wider uppercase text-white/70 font-medium whitespace-nowrap hidden md:block">
+            Avant
+          </div>
+          <div className="absolute top-1/2 -translate-y-1/2 translate-x-[calc(100%+16px)] text-xs tracking-wider uppercase text-white/70 font-medium whitespace-nowrap hidden md:block">
+            Après
           </div>
         </div>
       </div>

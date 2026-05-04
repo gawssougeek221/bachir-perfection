@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "PERFECTION AUTO | Luxury Restoration",
-  description: "Luxury automotive restoration in Dakar",
+  title: "PERFECTION BY BACHIR | Luxury Car Renovation Dakar",
+  description: "Rénovation automobile haut de gamme à Dakar, Sénégal",
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
   },

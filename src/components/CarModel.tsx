@@ -58,7 +58,7 @@ export default function CarModel() {
   });
 
   const bodyMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x111111,
+    color: 0x1a1810,
     metalness: 0.9,
     roughness: 0.3,
     clearcoat: 1.0,

@@ -4,20 +4,39 @@ import { motion } from "framer-motion";
 
 export default function CTA() {
   return (
-    <section className="py-32 px-6 text-center bg-[#F8F8F6]">
+    <section
+      className="py-32 px-6 text-center relative overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(180deg, #F8F8F6 0%, #F5F3EF 50%, #F8F8F6 100%)",
+      }}
+    >
+      {/* Decorative gold elements */}
+      <div className="absolute top-12 left-1/4 w-px h-20 bg-gradient-to-b from-transparent via-[#D4AF37]/20 to-transparent hidden md:block" />
+      <div className="absolute top-16 right-1/3 w-px h-16 bg-gradient-to-b from-transparent via-[#D4AF37]/15 to-transparent hidden md:block" />
+      <div className="absolute bottom-20 left-1/3 w-px h-16 bg-gradient-to-b from-[#D4AF37]/15 via-transparent to-transparent hidden md:block" />
+
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="max-w-2xl mx-auto"
+        className="max-w-2xl mx-auto relative"
       >
+        {/* Gold decorative line above */}
+        <div className="flex items-center justify-center gap-3 mb-10">
+          <div className="w-8 h-px bg-[#D4AF37]/40" />
+          <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+          <div className="w-8 h-px bg-[#D4AF37]/40" />
+        </div>
+
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-[#111] leading-tight">
           Votre voiture
           <br />
-          mérite mieux
+          mérite le{" "}
+          <span className="text-[#D4AF37]">meilleur</span>
         </h2>
-        <p className="text-[#666] mt-6 text-lg max-w-md mx-auto">
+        <p className="text-[#555] mt-6 text-lg max-w-md mx-auto">
           Contactez-nous pour une transformation premium
         </p>
 
@@ -25,7 +44,7 @@ export default function CTA() {
           href="https://wa.me/221XXXXXXXX"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block mt-10 px-8 py-4 bg-[#111] text-white rounded-full hover:bg-[#333] transition-colors duration-300 text-sm tracking-wider uppercase font-medium"
+          className="inline-block mt-10 px-8 py-4 bg-[#D4AF37] text-white rounded-full hover:bg-[#C4A030] transition-colors duration-300 text-sm tracking-wider uppercase font-medium"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -44,11 +63,11 @@ export default function CTA() {
 
         {/* Subtle decorative line */}
         <div className="mt-16 flex items-center justify-center gap-4">
-          <div className="w-12 h-px bg-[#ddd]" />
+          <div className="w-12 h-px bg-[#D4AF37]/30" />
           <span className="text-xs tracking-[0.3em] uppercase text-[#999]">
             Dakar, Sénégal
           </span>
-          <div className="w-12 h-px bg-[#ddd]" />
+          <div className="w-12 h-px bg-[#D4AF37]/30" />
         </div>
       </motion.div>
     </section>

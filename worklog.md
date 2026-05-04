@@ -1,23 +1,27 @@
 ---
-Task ID: 1
+Task ID: 2
 Agent: full-stack-developer
-Task: Build luxury car brand website with GSAP ScrollTrigger and Three.js
+Task: Redesign website to match luxury car mockup with gold accent theme
 
 Work Log:
-- Updated globals.css: removed dark mode variables, set warm off-white #F8F8F6 background, added smooth scrolling
-- Updated layout.tsx: switched from Geist to Inter font, updated metadata for PERFECTION AUTO brand, removed Toaster
-- Created CarModel.tsx: procedural 3D car using Three.js primitives (BoxGeometry, TorusGeometry, CylinderGeometry, SphereGeometry) with MeshPhysicalMaterial clearcoat for car paint effect, spinning wheels, floating animation via useFrame
-- Created Hero3D.tsx: full-screen hero with Canvas from @react-three/fiber, GSAP entrance animations (text fade from y:80), Environment preset="studio", OrbitControls with autoRotate, ContactShadows
-- Created StoryScroll.tsx: GSAP ScrollTrigger horizontal scroll with 4 panels (Voiture brute → Démontage → Peinture premium → Résultat showroom), pin:true, scrub:1
-- Created BeforeAfter.tsx: interactive before/after slider with mouse+touch drag support, clip-path based clipping, gradient placeholders simulating damaged vs pristine car
-- Created Services.tsx: 6 service cards in responsive grid with framer-motion whileInView scroll reveal animations, hover scale effects
-- Created CTA.tsx: call-to-action section with WhatsApp link button, framer-motion entrance animation, decorative location line
-- Assembled page.tsx: all 5 components composed in order (Hero → Story → BeforeAfter → Services → CTA)
+- Added gold color palette (#D4AF37, #C4A030) to globals.css
+- Created Navbar.tsx with fixed header, logo "PERFECTION BY BACHIR", nav links, WhatsApp CTA, mobile hamburger menu
+- Rebuilt Hero3D.tsx as image-based hero (no 3D), with gold typography, luxury gradient background, two CTA buttons, GSAP entrance animations, scroll indicator
+- Created TrustLogos.tsx with SVG brand logos (Mercedes, Porsche, Range Rover, Audi, BMW) and hover effects
+- Updated StoryScroll.tsx with warmer panel backgrounds, gold accent lines, step numbers, progress dots, improved descriptions
+- Updated BeforeAfter.tsx with gold slider handle (#D4AF37), gold divider line, Avant/Après labels on handle sides
+- Updated Services.tsx with gold card accents (border-t on hover), Lucide icons, gold underline on section title
+- Updated CTA.tsx with gradient background, "meilleur" in gold text, gold WhatsApp button, decorative gold line elements
+- Updated page.tsx with new section order: Navbar → Hero → TrustLogos → StoryScroll → BeforeAfter → Services → CTA
+- Updated layout.tsx metadata title and description
+- Updated CarModel.tsx body color to dark gold tint (0x1a1810)
+- ESLint passes clean with no errors
+- Dev server compiles successfully with 200 status codes
 
 Stage Summary:
-- All 6 components created and assembled in single-page layout
-- GSAP ScrollTrigger horizontal scroll implemented with pin
-- Procedural 3D car with PBR materials (clearcoat, metalness, transmission glass)
-- Premium Apple/Tesla-style design with #F8F8F6 background, Inter font, generous whitespace
-- ESLint passes with 0 errors
-- Dev server serving 200 OK on all requests
+- Complete redesign matching mockup specifications
+- Gold accent color (#D4AF37) applied throughout all components
+- Fixed navigation header with scroll shadow and mobile menu added
+- Trust logos section with SVG brand marks created
+- Hero rebuilt without 3D, with sophisticated gold typography and GSAP animations
+- All sections styled with consistent gold accent theme
