@@ -95,6 +95,7 @@ export default function Hero3D() {
         className="object-cover object-center"
         priority
         quality={90}
+        unoptimized
       />
 
       {/* Light overlay for text readability */}
