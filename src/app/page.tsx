@@ -6,14 +6,14 @@ import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 import GrainOverlay from "@/components/GrainOverlay";
 import Navbar from "@/components/Navbar";
-import Hero3D from "@/components/Hero3D";
+import { HeroScrub } from "@/components/ui/hero-scrub";
+import { ScrubMorphText } from "@/components/MorphEffects";
+import ScrubTransition from "@/components/ui/ScrubTransition";
+import ClipPathTransition from "@/components/ui/ClipPathTransition";
 import TrustLogos from "@/components/TrustLogos";
-import { ScrubMorphText, InfiniteMarquee } from "@/components/MorphEffects";
 import StatsSection from "@/components/StatsSection";
-import StoryScroll from "@/components/StoryScroll";
-import BeforeAfter from "@/components/BeforeAfter";
-import HorizontalGallery from "@/components/HorizontalGallery";
 import Services from "@/components/Services";
+import BeforeAfter from "@/components/BeforeAfter";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
@@ -26,46 +26,41 @@ export default function Page() {
       <GrainOverlay />
       {!loaded && <Preloader onComplete={() => setLoaded(true)} />}
       <main
-        className={`w-full overflow-x-hidden transition-opacity duration-1000 ${
+        className={`w-full overflow-x-clip transition-opacity duration-1000 ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
       >
         <Navbar />
-        <Hero3D />
 
-        {/* Scrub Morph Text Section */}
+        {/* ═══ HERO ═══ */}
+        <HeroScrub />
+
+        {/* ═══ NOTRE PHILOSOPHIE ═══ */}
         <ScrubMorphText />
 
-        {/* Infinite Marquee */}
-        <InfiniteMarquee
-          words={["PERFECTION", "BY BACHIR", "DAKAR", "SÉNÉGAL"]}
-          speed={25}
-          className="py-4 bg-[#050505]"
-        />
+        {/* ═══ WIPE: DARK → LIGHT ═══ */}
+        <ScrubTransition direction="dark-to-light" />
 
+        {/* ═══ TRUST + STATS (WHITE ZONE) ═══ */}
         <TrustLogos />
         <StatsSection />
-        <StoryScroll />
 
-        {/* Another Marquee */}
-        <InfiniteMarquee
-          words={["REBIRTH", "SHOWROOM", "PREMIUM", "EXPERTISE"]}
-          speed={35}
-          className="py-4 bg-[#111] rotate-[0.5deg]"
-        />
+        {/* ═══ CLIP PATH GOLDEN TRANSITION (LIGHT → DARK) ═══ */}
+        <ClipPathTransition />
 
-        <BeforeAfter />
-        <HorizontalGallery />
+        {/* ═══ SERVICES (DARK ZONE) ═══ */}
         <Services />
 
-        {/* Final Marquee */}
-        <InfiniteMarquee
-          words={["CONTACTEZ-NOUS", "WHATSAPP", "DEVIS GRATUIT", "DAKAR"]}
-          speed={30}
-          className="py-4 bg-[#0a0a0a]"
-        />
+        {/* ═══ BEFORE / AFTER (DARK ZONE) ═══ */}
+        <BeforeAfter />
 
+        {/* ═══ WIPE: DARK → LIGHT ═══ */}
+        <ScrubTransition direction="dark-to-light" />
+
+        {/* ═══ CTA (WHITE ZONE) ═══ */}
         <CTA />
+
+        {/* ═══ FOOTER (CINEMATIC) ═══ */}
         <Footer />
       </main>
     </SmoothScroll>
