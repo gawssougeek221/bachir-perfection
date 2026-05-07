@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Preloader from "@/components/Preloader";
 import SmoothScroll from "@/components/SmoothScroll";
-import CustomCursor from "@/components/CustomCursor";
-import GrainOverlay from "@/components/GrainOverlay";
 import Navbar from "@/components/Navbar";
 import { HeroScrub } from "@/components/ui/hero-scrub";
 import { ScrubMorphText } from "@/components/MorphEffects";
@@ -17,12 +15,28 @@ import BeforeAfter from "@/components/BeforeAfter";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
+function GrainOverlay() {
+  return (
+    <div
+      className="fixed inset-0 z-[9990] pointer-events-none opacity-[0.025]"
+      style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+      }}
+    />
+  );
+}
+
 export default function Page() {
   const [loaded, setLoaded] = useState(false);
 
+  // SAFETY: Force show page after 4 seconds even if preloader fails
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <SmoothScroll>
-      <CustomCursor />
       <GrainOverlay />
       {!loaded && <Preloader onComplete={() => setLoaded(true)} />}
       <main
