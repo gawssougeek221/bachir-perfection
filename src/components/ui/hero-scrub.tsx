@@ -6,7 +6,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FRAME_MAP = ["001", "002", "003", "005", "006", "007", "008", "009"];
+// 86 frames from the uploaded scroll-telling GIF
+const FRAME_COUNT = 86;
+const FRAME_MAP = Array.from({ length: FRAME_COUNT }, (_, i) =>
+  String(i + 1).padStart(3, "0"),
+);
 
 export function HeroScrub() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,11 +23,11 @@ export function HeroScrub() {
       const frames = framesRef.current.filter(Boolean);
       if (frames.length === 0) return;
 
-      // Pin the hero section
+      // Pin the hero section — scrub through all frames over ~300vh
       const st = ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
-        end: `+=${frames.length * 100}%`,
+        end: `+=300%`,
         pin: true,
       });
 
@@ -35,7 +39,7 @@ export function HeroScrub() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: `+=${frames.length * 100}%`,
+          end: `+=300%`,
           scrub: 1.5,
           onUpdate: () => {
             const idx = Math.round(obj.frame);
@@ -55,7 +59,7 @@ export function HeroScrub() {
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: `+=${frames.length * 60}%`,
+            end: `+=200%`,
             scrub: 1,
           },
         });
@@ -79,7 +83,7 @@ export function HeroScrub() {
         <img
           key={num}
           ref={(el) => { if (el) framesRef.current[i] = el; }}
-          src={`/frames/frame-${num}.jpg`}
+          src={`/frames/ezgif-frame-${num}.jpg`}
           alt=""
           className="absolute inset-0 w-full h-full object-cover transition-none"
           style={{
