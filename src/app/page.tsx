@@ -3,28 +3,18 @@
 import { useState, useEffect } from "react";
 import Preloader from "@/components/Preloader";
 import SmoothScroll from "@/components/SmoothScroll";
+import CustomCursor from "@/components/CustomCursor";
+import GrainOverlay from "@/components/GrainOverlay";
 import Navbar from "@/components/Navbar";
-import { HeroScrub } from "@/components/ui/hero-scrub";
-import { ScrubMorphText } from "@/components/MorphEffects";
-import ScrubTransition from "@/components/ui/ScrubTransition";
-import ClipPathTransition from "@/components/ui/ClipPathTransition";
+import Hero3D from "@/components/Hero3D";
+import StoryScroll from "@/components/StoryScroll";
 import TrustLogos from "@/components/TrustLogos";
 import StatsSection from "@/components/StatsSection";
+import HorizontalGallery from "@/components/HorizontalGallery";
 import Services from "@/components/Services";
 import BeforeAfter from "@/components/BeforeAfter";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-
-function GrainOverlay() {
-  return (
-    <div
-      className="fixed inset-0 z-[9990] pointer-events-none opacity-[0.025]"
-      style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
-      }}
-    />
-  );
-}
 
 export default function Page() {
   const [loaded, setLoaded] = useState(false);
@@ -37,6 +27,7 @@ export default function Page() {
 
   return (
     <SmoothScroll>
+      <CustomCursor />
       <GrainOverlay />
       {!loaded && <Preloader onComplete={() => setLoaded(true)} />}
       <main
@@ -46,35 +37,31 @@ export default function Page() {
       >
         <Navbar />
 
-        {/* ═══ HERO ═══ */}
-        <HeroScrub />
+        {/* ═══ 01 — HERO 3D ═══ */}
+        <Hero3D />
 
-        {/* ═══ NOTRE PHILOSOPHIE ═══ */}
-        <ScrubMorphText />
+        {/* ═══ 02 — NOTRE PROCESSUS (StoryScroll horizontal) ═══ */}
+        <StoryScroll />
 
-        {/* ═══ WIPE: DARK → LIGHT ═══ */}
-        <ScrubTransition direction="dark-to-light" />
-
-        {/* ═══ TRUST + STATS (WHITE ZONE) ═══ */}
+        {/* ═══ 03 — TRUST LOGOS (WHITE ZONE) ═══ */}
         <TrustLogos />
+
+        {/* ═══ 04 — STATS (WHITE ZONE) ═══ */}
         <StatsSection />
 
-        {/* ═══ CLIP PATH GOLDEN TRANSITION (LIGHT → DARK) ═══ */}
-        <ClipPathTransition />
+        {/* ═══ 05 — NOS RÉALISATIONS (Horizontal Gallery) ═══ */}
+        <HorizontalGallery />
 
-        {/* ═══ SERVICES (DARK ZONE) ═══ */}
+        {/* ═══ 06 — SERVICES ═══ */}
         <Services />
 
-        {/* ═══ BEFORE / AFTER (DARK ZONE) ═══ */}
+        {/* ═══ 07 — BEFORE / AFTER ═══ */}
         <BeforeAfter />
 
-        {/* ═══ WIPE: DARK → LIGHT ═══ */}
-        <ScrubTransition direction="dark-to-light" />
-
-        {/* ═══ CTA (WHITE ZONE) ═══ */}
+        {/* ═══ 08 — CTA ═══ */}
         <CTA />
 
-        {/* ═══ FOOTER (CINEMATIC) ═══ */}
+        {/* ═══ FOOTER ═══ */}
         <Footer />
       </main>
     </SmoothScroll>
